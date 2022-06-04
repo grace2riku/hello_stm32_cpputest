@@ -1,3 +1,9 @@
+#
+.metadata
+446re_test/Debug
+cpputest_library/Debug
+
+
 # Prerequisites
 *.d
 
