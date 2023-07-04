@@ -22,7 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "CppUTest/CommandLineTestRunner.h"
-#include "stdio.h"
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -41,6 +41,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 
@@ -48,13 +49,19 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+extern "C" {
+int __io_putchar(int ch) {
+	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 100);
+	return ch;
+}
+}
 /* USER CODE END 0 */
 
 /**
@@ -84,14 +91,19 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	const char* empty[] = {};
+  	setbuf(stdout, NULL);
+
+  	printf("Hello, World.\n");
+
+  	const char* empty[] = {};
 	const char* command_v[] = {"cpputest", "-v"};
 
-	printf("\n----- RunAllTests(0, empty) -----\n");
+	printf("----- RunAllTests(0, empty) -----\n");
 	CommandLineTestRunner::RunAllTests(0, empty);
 
-	printf("\n----- RunAllTests(2, command_v) -----\n");
+	printf("----- RunAllTests(2, command_v) -----\n");
 	CommandLineTestRunner::RunAllTests(2, command_v);
 
 	/* USER CODE END 2 */
@@ -147,6 +159,39 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
 }
 
 /* USER CODE BEGIN 4 */
