@@ -23,6 +23,10 @@
 /* USER CODE BEGIN Includes */
 #include "CppUTest/CommandLineTestRunner.h"
 #include <stdio.h>
+#include "ntshell.h"
+extern "C" {
+#include "usrcmd.h"
+}
 
 /* USER CODE END Includes */
 
@@ -61,6 +65,28 @@ int __io_putchar(int ch) {
 	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 100);
 	return ch;
 }
+
+static int serial_read(char* buf, int cnt, void* extobj) {
+	int i = 0;
+	while (i < cnt) {
+		if (HAL_UART_Receive(&huart2, (uint8_t*)&buf[i], 1, 0xFFFF) == HAL_OK) {
+			i++;
+		}
+	}
+	return cnt;
+}
+
+static int serial_write(const char* text, int cnt, void* extobj) {
+	HAL_UART_Transmit(&huart2, (uint8_t*)text, cnt, 100);
+	return cnt;
+}
+
+static int user_callback(const char* text, void* extobj) {
+	usrcmd_execute(text);
+	return 0;
+}
+
+
 }
 /* USER CODE END 0 */
 
@@ -71,6 +97,7 @@ int __io_putchar(int ch) {
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  ntshell_t nts;
 
   /* USER CODE END 1 */
 
@@ -106,6 +133,9 @@ int main(void)
 	printf("----- RunAllTests(2, command_v) -----\n");
 	CommandLineTestRunner::RunAllTests(2, command_v);
 
+	ntshell_init(&nts, serial_read, serial_write, user_callback, 0);
+	ntshell_set_prompt(&nts, ">");
+
 	/* USER CODE END 2 */
 
   /* Infinite loop */
@@ -113,6 +143,7 @@ int main(void)
 
   while (1)
   {
+	ntshell_execute(&nts);
     /* USER CODE END WHILE */
 
 	/* USER CODE BEGIN 3 */
