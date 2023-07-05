@@ -44,21 +44,21 @@ typedef int (*USRCMDFUNC)(int argc, char **argv);
 static int usrcmd_ntopt_callback(int argc, char **argv, void *extobj);
 static int usrcmd_help(int argc, char **argv);
 static int usrcmd_info(int argc, char **argv);
-static int read_user_button_b1(int argc, char **argv);
-static int write_led_ld2(int argc, char **argv);
+static int usrcmd_read_userbutton_b1(int argc, char **argv);
+static int usrcmd_write_led_ld2(int argc, char **argv);
 static int usrcmd_cpputest(int argc, char **argv);
 
 typedef struct {
-    char *cmd;
-    char *desc;
+    const char* cmd;
+    const char* desc;
     USRCMDFUNC func;
 } cmd_table_t;
 
 static const cmd_table_t cmdlist[] = {
     { "help", "This is a description text string for help command.", usrcmd_help },
     { "info", "This is a description text string for info command.", usrcmd_info },
-    { "read_user_button", "User button B1 reads.", read_user_button_b1 },
-    { "write_led", "Write to LED LD2.", write_led_ld2 },
+    { "read_userbutton", "User button B1 reads.", usrcmd_read_userbutton_b1 },
+    { "write_led", "Write to LED LD2.", usrcmd_write_led_ld2 },
     { "cpputest", "Exec CppUTest.", usrcmd_cpputest },
 };
 
@@ -83,7 +83,7 @@ static int usrcmd_ntopt_callback(int argc, char **argv, void *extobj)
         return 0;
     }
     const cmd_table_t *p = &cmdlist[0];
-    for (int i = 0; i < sizeof(cmdlist) / sizeof(cmdlist[0]); i++) {
+    for (unsigned int i = 0; i < sizeof(cmdlist) / sizeof(cmdlist[0]); i++) {
         if (ntlibc_strcmp((const char *)argv[0], p->cmd) == 0) {
             return p->func(argc, argv);
         }
@@ -96,7 +96,7 @@ static int usrcmd_ntopt_callback(int argc, char **argv, void *extobj)
 static int usrcmd_help(int argc, char **argv)
 {
     const cmd_table_t *p = &cmdlist[0];
-    for (int i = 0; i < sizeof(cmdlist) / sizeof(cmdlist[0]); i++) {
+    for (unsigned int i = 0; i < sizeof(cmdlist) / sizeof(cmdlist[0]); i++) {
         uart_puts(p->cmd);
         uart_puts("\t:");
         uart_puts(p->desc);
@@ -125,9 +125,9 @@ static int usrcmd_info(int argc, char **argv)
     return -1;
 }
 
-static int read_user_button_b1(int argc, char **argv){
+static int usrcmd_read_userbutton_b1(int argc, char **argv){
     if (argc != 1) {
-        uart_puts("read_user_button\r\n");
+        uart_puts("read_userbutton\r\n");
         return -1;
     }
 	GPIO_PinState b1_pin = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
@@ -136,7 +136,7 @@ static int read_user_button_b1(int argc, char **argv){
 	return 0;
 }
 
-static int write_led_ld2(int argc, char **argv){
+static int usrcmd_write_led_ld2(int argc, char **argv){
     if (argc != 2) {
         uart_puts("write_led_ld2 1 or write_led_ld2 0\r\n");
         return -1;
