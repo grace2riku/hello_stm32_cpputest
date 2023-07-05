@@ -43,6 +43,8 @@ typedef int (*USRCMDFUNC)(int argc, char **argv);
 static int usrcmd_ntopt_callback(int argc, char **argv, void *extobj);
 static int usrcmd_help(int argc, char **argv);
 static int usrcmd_info(int argc, char **argv);
+static int read_user_button_b1(int argc, char **argv);
+static int write_led_ld2(int argc, char **argv);
 
 typedef struct {
     char *cmd;
@@ -53,11 +55,15 @@ typedef struct {
 static const cmd_table_t cmdlist[] = {
     { "help", "This is a description text string for help command.", usrcmd_help },
     { "info", "This is a description text string for info command.", usrcmd_info },
+    { "read_user_button", "User button B1 reads.", read_user_button_b1 },
+    { "write_led", "Write to LED LD2.", write_led_ld2 },
 };
 
 enum {
   COMMAND_HELP,
   COMMAND_INFO,
+  COMMAND_READ_USER_BUTTON,
+  COMMAND_WRITE_LED,
   COMMAND_MAX
 };
 
@@ -115,3 +121,26 @@ static int usrcmd_info(int argc, char **argv)
     return -1;
 }
 
+static int read_user_button_b1(int argc, char **argv){
+    if (argc != 1) {
+        uart_puts("read_user_button\r\n");
+        return -1;
+    }
+	GPIO_PinState b1_pin = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
+	uart_puts("USER BUTTON B1 = %d\r\n", b1_pin);
+
+	return 0;
+}
+
+static int write_led_ld2(int argc, char **argv){
+    if (argc != 2) {
+        uart_puts("write_led_ld2 1 or write_led_ld2 0\r\n");
+        return -1;
+    }
+    GPIO_PinState PinState = GPIO_PIN_RESET;
+
+    if (ntlibc_strcmp(argv[1], "1") == 0) PinState = GPIO_PIN_SET;
+	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, PinState);
+
+	return 0;
+}
