@@ -35,6 +35,7 @@
 
 #include <stdio.h>
 #include "main.h"
+#include "CppUTest/CommandLineTestRunner.h"
 
 #define uart_puts printf
 
@@ -45,6 +46,7 @@ static int usrcmd_help(int argc, char **argv);
 static int usrcmd_info(int argc, char **argv);
 static int read_user_button_b1(int argc, char **argv);
 static int write_led_ld2(int argc, char **argv);
+static int usrcmd_cpputest(int argc, char **argv);
 
 typedef struct {
     char *cmd;
@@ -57,6 +59,7 @@ static const cmd_table_t cmdlist[] = {
     { "info", "This is a description text string for info command.", usrcmd_info },
     { "read_user_button", "User button B1 reads.", read_user_button_b1 },
     { "write_led", "Write to LED LD2.", write_led_ld2 },
+    { "cpputest", "Exec CppUTest.", usrcmd_cpputest },
 };
 
 enum {
@@ -64,6 +67,7 @@ enum {
   COMMAND_INFO,
   COMMAND_READ_USER_BUTTON,
   COMMAND_WRITE_LED,
+  COMMAND_CPPUTEST,
   COMMAND_MAX
 };
 
@@ -142,5 +146,10 @@ static int write_led_ld2(int argc, char **argv){
     if (ntlibc_strcmp(argv[1], "1") == 0) PinState = GPIO_PIN_SET;
 	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, PinState);
 
+	return 0;
+}
+
+static int usrcmd_cpputest(int argc, char **argv){
+	CommandLineTestRunner::RunAllTests(argc, argv);
 	return 0;
 }

@@ -24,9 +24,7 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include <stdio.h>
 #include "ntshell.h"
-extern "C" {
 #include "usrcmd.h"
-}
 
 /* USER CODE END Includes */
 
@@ -123,17 +121,6 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   	setbuf(stdout, NULL);
-
-  	printf("Hello, World.\n");
-
-  	const char* empty[] = {};
-	const char* command_v[] = {"cpputest", "-v"};
-
-	printf("----- RunAllTests(0, empty) -----\n");
-	CommandLineTestRunner::RunAllTests(0, empty);
-
-	printf("----- RunAllTests(2, command_v) -----\n");
-	CommandLineTestRunner::RunAllTests(2, command_v);
 
 	ntshell_init(&nts, serial_read, serial_write, user_callback, 0);
 	ntshell_set_prompt(&nts, ">");
