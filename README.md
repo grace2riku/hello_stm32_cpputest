@@ -1,6 +1,12 @@
 # hello_stm32_cpputest
 STM32の統合開発環境STM32CubeIDEにCppUTestを環境構築しTDDする
 
+# 使い方
+こちらの[Qiita記事](https://qiita.com/juraruming/items/2fbf398b9587757b17a2)を参照ください。
+
+## シリアルコンソール通信設定
+* 115200bps, データ長8bit, パリティなし, ストップビット1bit
+
 # ライセンス
 
 ## 446re_test
