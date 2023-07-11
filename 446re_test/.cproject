@@ -75,6 +75,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cpputest_library/include}&quot;"/>
 									<listOptionValue builtIn="false" value="../ntshell_core"/>
 									<listOptionValue builtIn="false" value="../ntshell_util"/>
+									<listOptionValue builtIn="false" value="../cpp_lerning_test"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.noexceptions.687016163" name="Disable handling exceptions (-fno-exceptions)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.noexceptions" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.nothreadsafestatics.537030581" name="Disable thread-safe initialization of local static objects (-fno-threadsafe-statics)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.nothreadsafestatics" useByScannerDiscovery="false" value="true" valueType="boolean"/>
